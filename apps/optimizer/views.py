@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from apps.optimizer.serializers import OptimizerInputSerialzer
 from apps.optimizer.algo import optimize_index
 
-from apps.optimizer.models import IndexSchedule
+from apps.optimizer.schedules import IndexSchedule
 
 from apps.courses.models import (
     Course,
@@ -12,7 +12,7 @@ from apps.courses.models import (
     CourseSchedule,
 )
 
-combinations_threshold = 1000 # limit to 1000 combinations
+combinations_threshold = 10 # limit to 10 combinations
 
 class OptimizeView(generics.CreateAPIView):
     serializer_class = OptimizerInputSerialzer
@@ -49,7 +49,7 @@ class GenScheduleView(generics.CreateAPIView):
         days = ["MON", "TUE", "WED", "THU", "FRI", "SAT"]
         empty_weekly_mask = {day: 0 for day in days}
 
-        # exam map: date → bitmask
+        # exam map: date -> bitmask
         empty_exam_map = {}
         
         def has_weekly_conflict(weekly_mask, idx: IndexSchedule):
